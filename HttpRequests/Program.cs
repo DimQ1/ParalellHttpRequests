@@ -17,14 +17,16 @@ namespace HttpRequests
 
             var urls = new Stack<string>();
 
-            urls.Push("https:\\\\ya.ru");
-            urls.Push("https:\\\\tut.by");
-            urls.Push("https:\\\\yandex.ru");
-            urls.Push("https:\\\\google.com");
-            urls.Push("https:\\\\google.ru");
-            urls.Push("https:\\\\g132343.ru");
+            for(var i=0; i<100; i++)
+            {
+                urls.Push("https://ya.ru");
+                urls.Push("https://yandex.ru");
+                urls.Push("https://google.com");
+                urls.Push("https://google.ru");
+                urls.Push("https://google.by");
+            }
 
-            HttpBruteForce httpBruteForce = new HttpBruteForce(urls, "", 2);
+            HttpBruteForce httpBruteForce = new HttpBruteForce(urls, "", 200);
 
             httpBruteForce.StartBruteForce();
 

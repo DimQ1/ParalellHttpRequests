@@ -73,11 +73,11 @@ namespace HttpRequests
                          response.EnsureSuccessStatusCode();
                          string responseBody = await response.Content.ReadAsStringAsync();
 
-                         logger.Info($"ok {webUrl}");
+                         logger.Info($"ok|{webUrl}");
                      }
                      catch (HttpRequestException e)
                      {
-                         logger.Error(e, webUrl);
+                         logger.Error(e, $"{e.Message}|{webUrl}");
                      }
                  }
              });
