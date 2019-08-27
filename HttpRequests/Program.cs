@@ -18,13 +18,8 @@ namespace HttpRequests
             var urls = new Stack<string>();
 
             urls.Push("https:\\\\ya.ru");
-            urls.Push("https:\\\\google.com");
-            urls.Push("https:\\\\ya.ru");
-            urls.Push("https:\\\\google.com");
-            urls.Push("https:\\\\ya.ru");
-            urls.Push("https:\\\\google.com");
-            urls.Push("https:\\\\google.com");
-            urls.Push("https:\\\\google.com");
+            urls.Push("https:\\\\tut.by");
+            urls.Push("https:\\\\yandex.ru");
             urls.Push("https:\\\\google.com");
             urls.Push("https:\\\\google.ru");
             urls.Push("https:\\\\g132343.ru");
