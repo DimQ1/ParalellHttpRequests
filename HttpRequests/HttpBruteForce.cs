@@ -12,6 +12,8 @@ namespace HttpRequests
         private readonly int _parralelCount;
         private readonly Stack<string> _urls;
         private static NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
+        private static HttpClientHandler handler = new HttpClientHandler() { MaxConnectionsPerServer = 200 };
+
 
         public HttpBruteForce(Stack<string> urls, string pathResult, int parralelCount = 10)
         {
@@ -39,7 +41,7 @@ namespace HttpRequests
                 Task.WaitAny(tasks.ToArray());
                 CleanFinishTasks(tasks);
             }
-                
+
         }
 
         private List<Task> CleanFinishTasks(List<Task> tasks)
@@ -59,18 +61,20 @@ namespace HttpRequests
 
         private async Task brutForceAsync(string webUrl)
         {
-            HttpClient client = new HttpClient();
-            try
+            using (HttpClient client = new HttpClient(handler))
             {
-                HttpResponseMessage response = await client.GetAsync(webUrl);
-                response.EnsureSuccessStatusCode();
-                string responseBody = await response.Content.ReadAsStringAsync();
+                try
+                {
+                    HttpResponseMessage response = await client.GetAsync(webUrl);
+                    response.EnsureSuccessStatusCode();
+                    string responseBody = await response.Content.ReadAsStringAsync();
 
-                logger.Info($"ok {webUrl}");
-            }
-            catch (HttpRequestException e)
-            {
-                logger.Error(e, webUrl);
+                    logger.Info($"ok {webUrl}");
+                }
+                catch (HttpRequestException e)
+                {
+                    logger.Error(e, webUrl);
+                }
             }
         }
     }
