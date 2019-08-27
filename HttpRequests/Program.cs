@@ -12,24 +12,37 @@ namespace HttpRequests
         static void Main(string[] args)
         {
 
-
             ConfigureLogger();
+            
+            var urls = GetUrls($"{System.IO.Directory.GetCurrentDirectory()}\\Hosts.txt");
 
-            var urls = new Stack<string>();
-
-            for(var i=0; i<100; i++)
-            {
-                urls.Push("https://ya.ru");
-                urls.Push("https://yandex.ru");
-                urls.Push("https://google.com");
-                urls.Push("https://google.ru");
-                urls.Push("https://google.by");
-            }
 
             HttpBruteForce httpBruteForce = new HttpBruteForce(urls, "", 200);
 
             httpBruteForce.StartBruteForce();
 
+        }
+
+
+        public static Stack<string> GetUrls(string path)
+        {
+            var returnStack = new Stack<string>();
+            var lines = System.IO.File.ReadAllLines(path);
+            var filterUrlCollection = lines.Where(l => !l.StartsWith("#"))
+                 .Select(l =>
+                 {
+                     var items = l.Split(' ');
+                     if (items.Length > 1)
+                     { return items[1]; }
+                     else { return null; }
+                 })
+                 .Where(l => l != null);
+            foreach (var item in filterUrlCollection)
+            {
+                returnStack.Push($"https://{item}");
+                returnStack.Push($"http://{item}");
+            }
+            return returnStack;
         }
 
 
