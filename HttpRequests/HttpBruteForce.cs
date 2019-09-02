@@ -12,13 +12,15 @@ namespace HttpRequests
         private readonly int _parralelCount;
         private readonly Stack<string> _urls;
         private static NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
-
+        private static HttpClientHandler handler = new HttpClientHandler() { MaxConnectionsPerServer = 65000 };
+        private static HttpClient _client;
 
 
         public HttpBruteForce(Stack<string> urls, string pathResult, int parralelCount = 10)
         {
             _parralelCount = parralelCount;
             _urls = urls;
+            _client = new HttpClient(handler);
         }
 
 
@@ -64,21 +66,17 @@ namespace HttpRequests
         {
             await Task.Run(async () =>
              {
-                 HttpClientHandler handler = new HttpClientHandler() { MaxConnectionsPerServer = 200 };
-                 using (HttpClient client = new HttpClient(handler))
+                 try
                  {
-                     try
-                     {
-                         HttpResponseMessage response = await client.GetAsync(webUrl);
-                         response.EnsureSuccessStatusCode();
-                         string responseBody = await response.Content.ReadAsStringAsync();
+                     HttpResponseMessage response = await _client.GetAsync(webUrl);
+                     response.EnsureSuccessStatusCode();
+                     string responseBody = await response.Content.ReadAsStringAsync();
 
-                         logger.Info($"ok|{webUrl}");
-                     }
-                     catch (HttpRequestException e)
-                     {
-                         logger.Error(e, $"{e.Message}|{webUrl}");
-                     }
+                     logger.Info($"ok|{webUrl}");
+                 }
+                 catch (HttpRequestException e)
+                 {
+                     logger.Error(e, $"{e.Message}|{webUrl}");
                  }
              });
         }
