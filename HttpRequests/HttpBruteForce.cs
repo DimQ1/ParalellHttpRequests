@@ -12,9 +12,6 @@ namespace HttpRequests
     {
         private readonly int _parralelCount;
         private readonly Stack<string> _urls;
-        private static NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
-
-
 
         public HttpBruteForce(Stack<string> urls, string pathResult, int parralelCount = 10)
         {
@@ -23,14 +20,13 @@ namespace HttpRequests
             ServicePointManager.DefaultConnectionLimit = parralelCount;
         }
 
-
         public void StartBruteForce()
         {
             List<Task> tasks = new List<Task>();
 
             while (_urls.Count > 0)
             {
-                tasks.Add(brutForceAsync(_urls.Pop()));
+                tasks.Add(LowLevelHttpRequest.BrutForceAsync(_urls.Pop()));
                 Console.WriteLine(_urls.Count());
 
                 if (tasks.Count > _parralelCount)
@@ -62,25 +58,6 @@ namespace HttpRequests
 
             return cleanTaskList;
         }
-
-        private async Task brutForceAsync(string webUrl)
-        {
-            await Task.Run(async () =>
-             {
-                 try
-                 {
-                     WebRequest webRequest = WebRequest.Create(webUrl);
-                     webRequest.Method = HttpMethod.Head.ToString();
-
-                     HttpWebResponse webresponse = (await webRequest.GetResponseAsync()) as HttpWebResponse;
-
-                     logger.Info($"ok| {webresponse.StatusCode:D}|{webUrl}");
-                 }
-                 catch (HttpRequestException e)
-                 {
-                     logger.Error(e, $"{e.Message}|{webUrl}");
-                 }
-             });
-        }
+       
     }
 }

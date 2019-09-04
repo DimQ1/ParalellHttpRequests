@@ -52,8 +52,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="HttpBruteForce.cs" />
+    <Compile Include="HttpRequest.cs" />
+    <Compile Include="Logger.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UrlsReader.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
