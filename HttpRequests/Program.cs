@@ -17,7 +17,7 @@ namespace HttpRequests
             var urls = GetUrls($"{System.IO.Directory.GetCurrentDirectory()}\\Hosts.txt");
 
 
-            HttpBruteForce httpBruteForce = new HttpBruteForce(urls, "", 200);
+            HttpBruteForce httpBruteForce = new HttpBruteForce(urls, "", 2000);
 
             httpBruteForce.StartBruteForce();
 
